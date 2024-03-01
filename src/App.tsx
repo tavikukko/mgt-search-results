@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Login, SearchResults, ThemeToggle } from '@microsoft/mgt-react';
 import './App.css';
+import React from 'react';
 
 function App() {
+
+  React.useEffect(function setupListener() {
+    function changeBackGround(value: any) {
+      if(value.detail){
+        document.body.style.backgroundColor = "black";
+      } else {
+        document.body.style.backgroundColor = "white";
+      }
+    }
+    window.addEventListener('darkmodechanged', changeBackGround)
+
+    return function cleanupListener() {
+      window.removeEventListener('darkmodechanged', changeBackGround)
+    }
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <ThemeToggle />
+        <Login></Login>
+        <SearchResults entityTypes={['driveItem']} fetchThumbnail={true} queryString="*"></SearchResults>
+    </>
   );
 }
 
